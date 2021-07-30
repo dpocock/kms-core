@@ -371,8 +371,18 @@ rtp_ssrc_demux_new_ssrc_pad (GstElement * ssrcdemux, guint ssrc, GstPad * pad,
       GST_ERROR_OBJECT (self,
           "Remote SSRC %u in RTCP doesn't match any SDP media",
           ssrc);
+
+      // Cannot identify which local media corresponds to the SSRC.
+      // The pad cannot be left without linking, so discard into a fakesink.
+      GstElement *fakesink = gst_element_factory_make ("fakesink", NULL);
+      gst_bin_add (GST_BIN (self), fakesink);
+      gst_element_sync_state_with_parent_target_state (fakesink);
+      GstPad *sink = gst_element_get_static_pad (fakesink, "sink");
+      kms_base_rtp_session_link_pads (pad, sink);
+      gst_object_unref (sink);
     }
-    goto end;
+
+    goto end_no_ssrc_sink;
   }
 
   /* RTP */
@@ -389,7 +399,7 @@ rtp_ssrc_demux_new_ssrc_pad (GstElement * ssrcdemux, guint ssrc, GstPad * pad,
   g_object_unref (src);
   g_object_unref (sink);
 
-end:
+end_no_ssrc_sink:
   KMS_SDP_SESSION_UNLOCK (self);
 }
 
