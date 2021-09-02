@@ -37,6 +37,8 @@ create_decoder_for_caps (const GstCaps * caps, const GstCaps * raw_caps)
   GstElement *decoder = NULL;
   gboolean contains_openh264 = FALSE;
 
+  //gboolean contains_openh264 = TRUE;
+
   decoder_list =
       gst_element_factory_list_get_elements (GST_ELEMENT_FACTORY_TYPE_DECODER,
       GST_RANK_NONE);
@@ -63,6 +65,7 @@ create_decoder_for_caps (const GstCaps * caps, const GstCaps * raw_caps)
 
     structure = gst_structure_copy (gst_caps_get_structure (caps, 0));
     gst_structure_remove_field (structure, "stream-format");
+    //gst_structure_remove_field (structure, "profile");
     caps_copy = gst_caps_new_full (structure, NULL);
     aux_list =
         gst_element_factory_list_filter (decoder_list, caps_copy, GST_PAD_SINK,
