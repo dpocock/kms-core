@@ -200,6 +200,30 @@ BaseRtpEndpointImpl::updateConnectionState (gchar *sessId, guint new_state)
   }
 }
 
+void BaseRtpEndpointImpl::sendPictureFastUpdate ()
+{
+  GST_ERROR ("sendPictureFastUpdate is incomplete");
+  GstElement *e = element ; // getGstreamerElement ();
+  if(!e)
+  {
+    GST_ERROR ("getGstreamerElement returned NULL");
+    return;
+  }
+  gboolean result;
+  g_signal_emit_by_name (element, "request-local-key-frame", &result);
+  //GstPad *videosinkpad;
+  // videosinkpad = gst_element_get_static_pad(e, "send_rtp_sink_1");
+  /*videosinkpad = getSinkConnections("VIDEO").begin()->getSinkPad();
+  if(!videosinkpad)
+  {
+    GST_ERROR ("gst_element_get_static_pad returned NULL");
+    return;
+  }
+  gst_pad_send_event(videosinkpad, gst_event_new_custom(GST_EVENT_CUSTOM_UPSTREAM,
+                                                                 gst_structure_new("GstForceKeyUnit", "all-headers",
+                                                                                   G_TYPE_BOOLEAN, TRUE, NULL))); */
+}
+
 int BaseRtpEndpointImpl::getMinVideoRecvBandwidth ()
 {
   int minVideoRecvBandwidth;

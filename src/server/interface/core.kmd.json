@@ -966,6 +966,15 @@ If the negotiation process is not complete, it will return NULL.
         }
       ],
       "methods": [
+        {
+          "name": "sendPictureFastUpdate",
+          "doc": "Sends a keyframe to the RTP peer.
+<p>
+  The RTP peer may have missed some packets and it needs a new keyframe.
+</p>
+          ",
+          "params": []
+        }
       ],
       "events": [
         "MediaStateChanged",
