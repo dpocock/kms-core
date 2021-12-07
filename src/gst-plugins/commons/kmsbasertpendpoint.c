@@ -259,6 +259,7 @@ enum
 {
   MEDIA_START,
   MEDIA_STOP,
+  KEYFRAME_REQUIRED,
   MEDIA_STATE_CHANGED,
   GET_CONNECTION_STATE,
   CONNECTION_STATE_CHANGED,
@@ -3022,6 +3023,13 @@ kms_base_rtp_endpoint_class_init (KmsBaseRtpEndpointClass * klass)
       G_STRUCT_OFFSET (KmsBaseRtpEndpointClass, connection_state_changed), NULL,
       NULL, __kms_core_marshal_VOID__STRING_ENUM, G_TYPE_NONE, 2, G_TYPE_STRING,
       KMS_TYPE_CONNECTION_STATE);
+
+  obj_signals[KEYFRAME_REQUIRED] =
+      g_signal_new ("keyframe-required",
+      G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST,
+      G_STRUCT_OFFSET (KmsBaseRtpEndpointClass, keyframe_required), NULL,
+      NULL, g_cclosure_marshal_VOID__ENUM, G_TYPE_NONE, 0);
 
   obj_signals[MEDIA_STATE_CHANGED] =
       g_signal_new ("media-state-changed",
