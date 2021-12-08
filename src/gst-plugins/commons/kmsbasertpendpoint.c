@@ -913,6 +913,7 @@ kms_base_rtp_endpoint_request_rtp_sink (KmsIRtpSessionManager * manager,
     pad =
         gst_element_get_request_pad (self->priv->rtpbin,
         VIDEO_RTPBIN_RECV_RTP_SINK);
+    g_signal_emit (self, obj_signals[KEYFRAME_REQUIRED], 0);
   } else {
     GST_ERROR_OBJECT (self, "'%s' not valid", media_str);
     return NULL;
@@ -940,7 +941,8 @@ kms_base_rtp_endpoint_request_rtp_src (KmsIRtpSessionManager * manager,
         gst_element_get_static_pad (self->priv->rtpbin,
         VIDEO_RTPBIN_SEND_RTP_SRC);
 
-    g_signal_emit_by_name (self, "force-key-unit");
+    // g_signal_emit_by_name (self, "force-key-unit");
+    g_signal_emit (self, obj_signals[KEYFRAME_REQUIRED], 0);
     kms_utils_drop_until_keyframe (pad, TRUE);
 
     /* TODO: check if needed for audio */
@@ -3026,7 +3028,7 @@ kms_base_rtp_endpoint_class_init (KmsBaseRtpEndpointClass * klass)
       KMS_TYPE_CONNECTION_STATE);
 
   obj_signals[KEYFRAME_REQUIRED] =
-      g_signal_new ("keyframe-required",
+      g_signal_new ("remote-req-key-unit",
       G_TYPE_FROM_CLASS (klass),
       G_SIGNAL_RUN_LAST,
       G_STRUCT_OFFSET (KmsBaseRtpEndpointClass, keyframe_required), NULL,

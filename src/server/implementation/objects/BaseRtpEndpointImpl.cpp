@@ -66,7 +66,7 @@ void BaseRtpEndpointImpl::postConstructor ()
   SdpEndpointImpl::postConstructor ();
 
   keyframeRequiredHandlerId = register_signal_handler (G_OBJECT (element),
-                               "force-key-unit",
+                               "remote-req-key-unit",
                                std::function <void (GstElement *) > (std::bind (
                                      &BaseRtpEndpointImpl::keyframeRequired, this) ),
                                std::dynamic_pointer_cast<BaseRtpEndpointImpl>
