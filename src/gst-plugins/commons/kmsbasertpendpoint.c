@@ -940,6 +940,7 @@ kms_base_rtp_endpoint_request_rtp_src (KmsIRtpSessionManager * manager,
         gst_element_get_static_pad (self->priv->rtpbin,
         VIDEO_RTPBIN_SEND_RTP_SRC);
 
+    g_signal_emit_by_name (self, "force-key-unit");
     kms_utils_drop_until_keyframe (pad, TRUE);
 
     /* TODO: check if needed for audio */
